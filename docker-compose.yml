@@ -1,0 +1,26 @@
+# Project name: lmapp-13000
+name: lmapp-13000
+
+services:
+  13000-hello-world:
+    image: 65.108.242.175:5000/lm-app/13000-helloworld:latest
+    container_name: 13000-hello-world-container
+    ports:
+      - "13000:13000"
+    environment:
+      - NODE_ENV=production
+      - PORT=13000
+      - HOSTNAME=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:13000/lm-app/13000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - 13000-hello-world
+
+networks:
+  13000-hello-world:
+    driver: bridge
